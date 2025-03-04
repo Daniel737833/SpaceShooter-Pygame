@@ -13,8 +13,8 @@ Steg 10 - Lägg till musik och ljudeffekter
 '''
 import pygame
 
-SKÄRMENS_BREDD = 800
-SKÄRMENS_HÖJD = 600
+SKÄRMENS_BREDD = 850
+SKÄRMENS_HÖJD = 650
 
 skärm = pygame.display.set_mode((SKÄRMENS_BREDD, SKÄRMENS_HÖJD))
 
@@ -30,6 +30,11 @@ spelare_x = SKÄRMENS_BREDD // 2 - 120
 spelare_y = SKÄRMENS_HÖJD - 200
 spelarens_hastighet = 1
 
+background_mörkblå = pygame.image.load("assets/backgrounds/bg.png")
+background_stjärnor = pygame.image.load("assets/backgrounds/Stars-A.png")
+
+bakgrund_y = 0
+
 while (spelet_körs == True):
 
     skärm.fill((0, 0, 30))
@@ -39,6 +44,28 @@ while (spelet_körs == True):
         if event.type == pygame.QUIT:
             spelet_körs = False
         
-        skärm.blit(sprite_spelare, (spelare_x, spelare_y))
+    skärm.blit(background_mörkblå, (0,0))
 
-        pygame.display.update()
+    skärm.blit(background_stjärnor, (0, bakgrund_y))
+
+    skärm.blit(background_stjärnor, (0, bakgrund_y - SKÄRMENS_HÖJD))
+
+    bakgrund_y = bakgrund_y + 2
+
+    if bakgrund_y >= SKÄRMENS_HÖJD:
+        bakgrund_y = 0
+
+    skärm.blit(sprite_spelare, (spelare_x, spelare_y))
+    pygame.display.update()
+
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT] and spelare_x > 0:
+        spelare_x = spelare_x - spelarens_hastighet
+    if keys[pygame.K_RIGHT] and spelare_x < SKÄRMENS_BREDD - sprite_spelare.get_width():
+        spelare_x = spelare_x + spelarens_hastighet
+    if keys[pygame.K_UP] and spelare_y > 0:
+        spelare_y = spelare_y - spelarens_hastighet
+    if keys[pygame.K_DOWN] and spelare_y < SKÄRMENS_HÖJD - sprite_spelare.get_width() + 26:
+        spelare_y = spelare_y + spelarens_hastighet
+
+pygame.quit()
